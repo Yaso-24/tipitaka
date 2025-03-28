@@ -202,6 +202,8 @@ function book(event, filename) {
     homepage.style.display = 'none'
     loaddata.style.display = 'block'
     loaddata.scrollIntoView(true)
+
+    document.getElementById('loadermain').style.display = "flex"
     var imprtbook = document.createElement('script')
     var useragent = navigator.userAgent.toLowerCase()
     
@@ -392,8 +394,8 @@ function bookhelper() {
 
     chaptxt = undefined
 
-    console.log(chaptxt)
-
+   // console.log(chaptxt)
+ document.getElementById('loadermain').style.display = "none"
 
 
 }// bookhelper end
