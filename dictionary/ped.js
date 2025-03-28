@@ -1,0 +1,4 @@
+var ped = [
+[ `অ'<sup> ১ </sup>`, ` the prep. <b>ā</b> shortened before double cons., as <b>akkosati (ā + kruś), akkhāti (ā + khyā), abbahati (ā + bṛh)</b> -- Best to be classed here is the <b>a -- </b> we call expletive. It represents a reduction of <b>ā -- </b> (mostly before liquids and nasals and with single consonant instead of double). Thus <b>anantaka</b> (for <b>ā -- nantaka = nantaka</b>) Vv.80<sup>7</sup>; <b>amajjapa</b> (for <b>ā -- majjapa = majjapa</b>) J <smallcaps>vi.</smallcaps>328; <b>amāpaya</b> (for <b>āmāpaya = māpaya</b>) J <smallcaps>vi.</smallcaps>518; <b>apassato (= passantassa)</b> J <smallcaps>vi.</smallcaps>552. ` ], 
+[ `হোরাপাঠক`, ` [late Sk. horā "hour" (in astrol. literature, fr. Gr. <at>w(/ra</at>: cp. Winternitz, <i>Gesch. d. Ind. Lit.</i> <smallcaps>iii.</smallcaps>569 sq.)+pāṭhaka, i. e. expert] an astrologer Mhvs 35, 71.  ` ] 
+]

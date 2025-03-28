@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div style="display: none;" id="jj"></div>
+    <input type="hidden" id="id" />First name:
+    <input type="text" id="_word" />
+    <br />Last name:
+    <input type="text" id="_gram" />
+    <br />_meaning:
+    <input type="text" id="_meaning" />
+    <br />
+    <button class="reset">Reset Form</button>
+    <button class="update">Update</button>
+    <button class="insert">Insert</button>
+    <button class="drop">Drop Table</button>
+    <div id="results"></div>
+    <div id="get"> <button onclick="createTable()">createdate</button></div>
+    <br><br>
+    <div id="get" onclick="getid()"> get id</div>
+    <div> </div><button onclick="insertDicData()">insertAll</button>
+
+    <div id="time"></div>
+    <div id="loading">Loding..............</div>
+    <script type="text/javascript">
+
+
+
+        var results = $('#results')[0];
+        var id = $('#id')[0];
+        var _word = $('#_word')[0];
+        var _gram = $('#_gram')[0];
+        var _meaning = $('#_meaning')[0];
+
+        var createStatement = "CREATE TABLE IF NOT EXISTS pbd (id INTEGER PRIMARY KEY AUTOINCREMENT, _word TEXT, _gram TEXT, _meaning TEXT)";
+        var selectAllStatement = "SELECT * FROM pbd";
+        var insertStatement = "INSERT INTO pbd (_word, _gram, _meaning) VALUES (?, ?, ?)";
+        var updateStatement = "UPDATE pbd SET _word = ?, _gram = ?, _meaning = ? WHERE id = ?";
+        var deleteStatement = "DELETE FROM pbd WHERE id=?";
+        var dropStatement = "DROP TABLE pbd";
+        var uid = "SELECT * FROM pbd where id=2";
+        var db = openDatabase("PaliBanglaDictionary", "1.0", "PaliBanglaDictionary", 200000000);
+        var dataset;
+        
+
+        function onError(tx, error) {
+            alert(error.message);
+        }
+
+        function showRecords() {
+            results.innerHTML = '';
+            db.transaction(function (tx) {
+                tx.executeSql(selectAllStatement, [], function (tx, result) {
+                    dataset = result.rows;
+
+                    for (var i = 0, item = null; i < dataset.length; i++) {
+                        item = dataset.item(i);
+
+
+                        // results.innerHTML += '<li>' + item['_gram'] + ' , ' + item['_word'] + ' <a href="#" onclick="loadRecord(' + i + ')">edit</a>  ' + '<a href="#" onclick="deleteRecord(' + item['id'] + ')">delete</a></li>';
+                    }
+                });
+            });
+        }
+
+        function getid() {
+            results.innerHTML = '';
+            db.transaction(function (tx) {
+                tx.executeSql(uid, [], function (tx, result) {
+                    dataset = result.rows;
+                    var obj = dataset['0']
+                    results.innerHTML = Object.values(obj).join(' ')
+                    console.log(Object.values(obj))
+                });
+            });
+        }
+
+        //getid()
+
+        function createTable() {
+            db.transaction(function (tx) {
+                tx.executeSql(createStatement, [], showRecords, onError);
+            });
+        }
+
+        function insertRecord() {
+            db.transaction(function (tx) {
+                for (var i = 0; i < 4000; i++) {
+
+                    tx.executeSql(insertStatement, [_word.value + i, _gram.value + i, _meaning.value], showRecords, onError);
+                }
+            });
+        }
+
+        function loadRecord(i) {
+            var item = dataset.item(i);
+            _word.value = item['_word'];
+            _gram.value = item['_gram'];
+            _meaning.value = item['_meaning'];
+            id.value = item['id'];
+        }
+
+        function updateRecord() {
+            db.transaction(function (tx) {
+                tx.executeSql(updateStatement, [_word.value, _gram.value, _meaning.value, id.value], loadAndReset, onError);
+            });
+        }
+
+        function deleteRecord(id) {
+            db.transaction(function (tx) {
+                tx.executeSql(deleteStatement, [id], showRecords, onError);
+            });
+            resetForm();
+        }
+
+        function dropTable() {
+            db.transaction(function (tx) {
+                tx.executeSql(dropStatement, [], showRecords, onError);
+            });
+            resetForm();
+        }
+
+        function loadAndReset() {
+            resetForm();
+            showRecords();
+        }
+
+        function resetForm() {
+            _word.value = '';
+            _gram.value = '';
+            _meaning.value = '';
+            id.value = '';
+        }
+
+        $('.reset').on('click', resetForm);
+        $('.update').on('click', updateRecord);
+        $('.insert').on('click', insertRecord);
+        $('.drop').on('click', dropTable);
+
+        function f() {
+            var r = []
+            var t = '১. সে সময়ে ভগবান বুদ্ধ পঞ্চশত ভিক্ষু সমন্বিত মহতী ভিক্ষুসংঘের সঙ্গে বৈরঞ্জ নামক স্থানের নলেরুপুচিমন্দমূলে[2] অবস্থান করছিলেন। তখন বৈরঞ্জ নামক ব্রাহ্মণ শুনলেন যে, “শাক্যকুল হতে প্রব্রজিত শাক্যপুত্র শ্রমণ গৌতম পঞ্চশত ভিক্ষু সমন্বিত মহাভিক্ষুসংঘের সঙ্গে বৈরঞ্জের নলেরুপুচিমন্দমূলে অবস্থান করছেন। সেই ভগবান গৌতমের এরূপ কল্যাণকীর্তি (যশকীর্তি) অভ্যুত্থিত (প্রচারিত) হয়েছে : ‘তিনি ভগবান, অর্হৎ, সম্যকসম্বুদ্ধ, বিদ্যাচরণসম্পন্ন, সুগত, লোকবিদ, অনুত্তর, দম্যপুরুষ সারথি, দেবমনুষ্যের শাস্তা, বুদ্ধ ভগবান।’ তিনি দেবলোক, মারলোক, ব্রহ্মলোক, শ্রমণ-ব্রাহ্মণ, প্রজাবর্গ এবং সকল দেবমনুষ্যগণসহ এসব লোক স্বয়ং অভিজ্ঞা দ্বারা'
+            for (var i = 0; i < 40000; i++) {
+                r.push(t)
+            }
+            console.log(r)
+            document.getElementById('jj').innerHTML = r.join(' ')
+        }
+
+
+
+        function datasetdb(id, word, mean, i) {
+            db.transaction(function (tx) {
+                tx.executeSql(insertStatement, [id, word, mean], t, onError);
+                document.getElementById('loading').innerHTML = "loading....." + i
+                if (i === 43653) {
+                    document.getElementById('loading').style.display = 'none'
+                    window.localStorage.setItem('db', 'set')
+                    console.log('finish')
+                }
+            });
+        }
+        function insertDicData() {
+            var isdb = window.localStorage.getItem('db')
+
+            if (!isdb) {
+                var script = document.createElement('script')
+                script.src = './data/pbd.js'
+                document.head.appendChild(script)
+                setTimeout(() => {
+                    for (var i = 0; i < 11; i++) {
+                        datasetdb(pbd[i][0], pbd[i][1], pbd[i][2], i)
+                        var mean, word, id
+                        mean = pbd[i][0]
+                        word = pbd[i][2]
+                        id = pbd[i][1]
+                    }
+                }, 2000)
+
+            } else {
+                document.getElementById('loading').style.display = 'none'
+
+            }
+        }
+        function t() {
+            setInterval(myTimer, 1000);
+        }
+
+        function deleteSeqenceId() {
+            for (var i = 1; i < 6961; i++) {
+                deleteRecord(i)
+            }
+        }
+
+
+
+
+        function myTimer() {
+            var d = new Date();
+            var t = d.toLocaleTimeString();
+            document.getElementById('time').innerHTML = t
+        }
+
+
+        db.transaction(function(tx){
+            console.log(tx)
+            tx.executeSql(uid, [], function (tx, result) {
+                dataset = result.rows;
+                console.log(dataset)
+            });
+        })
+        console.log()
+    </script>
+</body>
+
+</html>

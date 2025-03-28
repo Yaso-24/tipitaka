@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bold</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script src="./cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #main {
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+        }
+
+        #books {
+            margin-right: 0%;
+            background-color: aqua;
+            height: 100%;
+
+            position: fixed;
+            overflow: scroll;
+        }
+
+        li {
+            list-style: none;
+            padding: 10px 5px;
+        }
+
+        #load {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            height: auto;
+            margin-left: 25%;
+        }
+
+         #formettxt {
+           
+            margin-left: 32%;
+        }
+        #loaddata {
+            width: 50%;
+            padding: 10px 5px;
+            display: none;
+        }
+
+        #loaddatacopy {
+            border-left: 1px solid red;
+            width: 50%;
+            padding: 10px 5px;
+        }
+
+        .bld {
+            font-weight: bold;
+        }
+
+        .active {
+            background-color: royalblue;
+        }
+
+        #copy {
+            position: fixed;
+            display: none;
+            text-align: center;
+            /* margin: 10px 40%; */
+            width: 100%;
+            background: blue;
+        }
+    </style>
+    <script src="./lib/dom/makedom.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./lib/websql/database.js"></script>
+    <script src="./search.js"></script>
+</head>
+
+<body>
+    <h1 id="copy">copying text</h1>
+    <div id="main">
+        <div id="books"></div>
+        <div id="load">
+            <div id="loaddata"></div>
+            <div id="loaddatacopy"></div>
+
+        </div>
+    </div>
+    <div style="margin: 10px 150px;" id="databaseinit"><h2> databaseinit</h2></div>
+    <div style="margin: 10px 150px;" id="insertdata" onclick="searchTxt('')"><h2> InsertData</h2></div>
+    <div style="margin: 10px 150px;" id="insertdata" onclick="insertdata2(0)">
+        <h2> InsertData 2</h2>
+    </div>
+
+    <div style="margin: 10px 150px;" id="insetedfile"></div>
+ 
+
+    <div id="formettxt"></div>
+    <div id="copy-target">
+        <h1>hello</h1>
+    </div>
+    <button class="copy-button" data-clipboard-action="copy" data-clipboard-target="#copy-target">Copy</button>
+
+    <script>
+        var clipboard = new Clipboard('.copy-button');
+    </script>
+    <script>
+        function searchhelper() {
+
+        }
+        function bookhelper() {
+
+        }
+
+        function copyToClipboard(text) {
+            const elem = document.createElement('textarea');
+            elem.value = text;
+            document.body.appendChild(elem);
+            // document.querySelector('textarea').style.display = 'none'
+            elem.select();
+            document.execCommand('copy');
+            document.body.removeChild(elem);
+        }
+        var bookFile = []
+        for (let i = 0; i < mula.length; i++) {
+            const element = mula[i];
+            bookFile.push(`<li id="${element}" onclick="loadJson2('${element}', event)"> ${element} </li>`)
+        }
+
+        document.getElementById('books').innerHTML = bookFile.join('')
+
+        document.getElementById(localStorage['lastActive']).className = 'active'
+        function subclick(allquery) {
+            setTimeout(() => {
+                var clickTop = document.querySelector(`.${allquery}`)
+                clickTop.scrollIntoView(true);
+                clickTop.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+                window.scrollBy(0, -70)
+
+            }, 100)
+        }
+        subclick('active')
+
+
+        var maintext
+        function loadJson2(file, e) {
+            var finalstr;
+            console.log(e)
+            try {
+                document.querySelectorAll('.active').forEach(function (e) {
+                    e.className = ''
+                })
+            } catch (error) {
+
+            }
+            e.target.className = 'active'
+            localStorage['lastActive'] = file
+
+
+            document.getElementById('loaddatacopy').innerHTML = ''
+
+
+            file = "./bookdata/" + file;
+            var rawFile = new XMLHttpRequest();
+            //var rawFile = this
+            // rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function () {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    maintext = rawFile.responseText
+                    eval(rawFile.responseText)
+                    document.getElementById('formettxt').innerHTML = ''
+
+                    try {
+                        setTimeout(function () {
+                            chapterCheck()
+                        }, 1000)
+                    } catch (error) {
+
+                    }
+                }
+            }
+            rawFile.send(null);
+            return finalstr
+        }
+
+        document.getElementById('formettxt').addEventListener('click', function () {
+            localStorage['hdata'] = JSON.stringify(document.getElementById('formettxt').innerHTML)
+
+            var ndata = document.querySelector('#formettxt').outerHTML
+            ndata += ''
+
+            // console.log(ndata)
+
+            // var arrh = ndata.split("\n")
+            // if(ndata.includes("\n")){
+            //     console.log("hhh" + arrh[20])
+            //     console.log("hhh" +arrh[21])
+            //     console.log("hhh" +arrh[22])
+            //     console.log("hhh" +arrh[23])
+
+            // }
+           // ndata = ndata.split("\n")
+            //console.log(ndata.length)
+           // nda= ndata.join(' ') 
+            document.querySelector('#copy').style.display = 'block'
+
+          //  nda = nda.split("_$<br>")
+            
+           // n = nda.join('_$<br>\n') + ''
+           //   console.log(n)
+            setTimeout(function () {
+                document.querySelector('#copy').style.display = 'none'
+                copyToClipboard(ndata)
+            }, 2000)
+            
+        })
+
+
+        function copyDivToClipboard() {
+            var range = document.createRange();
+            range.selectNode(document.getElementById("loaddata"));
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();// to deselect
+
+        }
+        
+    </script>
+    <!-- <script src="./bookdata/mula_1_2.js"></script> -->
+    
+    <script src="./bold.js"></script>
+
+</body>
+
+
+</html>
